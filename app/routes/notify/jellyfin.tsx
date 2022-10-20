@@ -1,5 +1,6 @@
 import type { ActionArgs } from '@remix-run/node'
 import { renderToStaticMarkup } from 'react-dom/server'
+import { authorizeRequest } from '~/utils/authorize.server'
 import {
   getJellyfinNotification,
   getParsedJellyfinItem,
@@ -7,6 +8,8 @@ import {
 import { sendMessage } from '~/utils/telegram.server'
 
 export const action = async ({ request }: ActionArgs) => {
+  authorizeRequest(request)
+
   const body = await request.json()
   const item = await getParsedJellyfinItem(body)
   const notification = await getJellyfinNotification(item)
